@@ -2,6 +2,7 @@ import { Product } from "@/data/Product";
 import Badge from "@/shared/Badge";
 import StartRating from "@/shared/StartRating";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export interface ProductCatelogProps {
@@ -67,8 +68,10 @@ const ProductCatelog: React.FC<ProductCatelogProps> = ({
 
     return (
         <div className="p-4 border rounded-2xl">
-            {renderImage()}
-            {renderContent()}
+            <Link href={`/${data?.id}`}>
+                {renderImage()}
+                {renderContent()}
+            </Link>
         </div>
     );
 };

@@ -9,7 +9,7 @@ export interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({
     img = "",
-    className = "w-32",
+    className = "w-52",
 }) => {
     return (
         <Link
@@ -23,7 +23,7 @@ const Logo: React.FC<LogoProps> = ({
                     alt="Logo"
                 />
             ) : (
-               <h1 className="font-black font-mono text-2xl tracking-wider">ECOM</h1>
+               <h1 className="font-black font-mono text-2xl bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-800">Product-Hub</h1>
             )}
 
         </Link>

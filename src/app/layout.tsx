@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Roboto } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header/Header'
+import { ReduxProvider } from '@/redux/provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <Header />
-        {children}
+        <ReduxProvider>
+          <Header />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   )

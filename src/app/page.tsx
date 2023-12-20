@@ -2,34 +2,22 @@
 
 import ProductCatelog from "@/components/ProductCatelog";
 import { Product } from "@/data/Product";
+import { fetchProducts } from "@/redux/features/productSlice";
+import { AppDispatch, useAppSelector } from "@/redux/store";
 import Heading from "@/shared/Heading";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState("")
-  const [products, setProducts] = useState<Product[]>([])
+  const dispatch = useDispatch<AppDispatch>()
 
-  const fetchProducts = () => {
-    setIsLoading(true);
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-        setProducts(json);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err);
-        setIsLoading(false);
-      });
-  };
+  const { products, loadingProducts } = useAppSelector((state) => state.products)
 
   // Fetch products for listing.
   useEffect(() => {
-    fetchProducts()
-  }, []);
+    dispatch(fetchProducts())
+  }, [dispatch]);
+
 
   return (
     <main className="">
@@ -43,7 +31,7 @@ export default function Home() {
         <div className="py-10">
           <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {products?.map((product) => (
-              <ProductCatelog key={product?.id} data={product} isLoading={isLoading} />
+              <ProductCatelog key={product?.id} data={product} isLoading={loadingProducts} />
             ))}
           </div>
         </div>
