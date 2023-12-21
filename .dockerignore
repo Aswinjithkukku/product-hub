@@ -1,0 +1,18 @@
+# Ignore node_modules except the ones that are necessary for building
+node_modules
+!node_modules/next
+!node_modules/react
+!node_modules/react-dom
+
+# Ignore build artifacts
+.next
+out
+.build
+
+# Ignore development-related files
+*.log
+*.tsbuildinfo
+
+# Ignore version control files
+.git
+.gitignore

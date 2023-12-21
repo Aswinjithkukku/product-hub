@@ -26,6 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+          <title id="title">Product-Hub</title>
       <body className={roboto.className}>
         <ReduxProvider>
           <Header />
