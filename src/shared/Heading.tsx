@@ -4,6 +4,7 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
     fontClass?: string;
     desc?: ReactNode;
     isCenter?: boolean;
+    textSize?: string
 }
 
 const Heading: React.FC<HeadingProps> = ({
@@ -11,6 +12,7 @@ const Heading: React.FC<HeadingProps> = ({
     desc,
     className = "mb-10 text-neutral-900 ",
     isCenter = false,
+    textSize = "text-3xl",
     ...args
 }) => {
     return (
@@ -20,7 +22,7 @@ const Heading: React.FC<HeadingProps> = ({
                     isCenter ? "text-center w-full max-w-2xl mx-auto mb-4" : "max-w-2xl"
                 }
             >
-                <h2 className={`text-3xl font-semibold`} {...args}>
+                <h2 className={`${textSize} font-semibold`} {...args}>
                     {children || `Section Heading`}
                 </h2>
                 {desc && (

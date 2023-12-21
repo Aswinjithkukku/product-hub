@@ -7,6 +7,15 @@ export enum ProductCategoryEnum {
   womensclothing = "women's clothing",
 }
 
+export enum SizesEnum {
+  XS = "XS",
+  S = "S",
+  M = "M",
+  L = "L",
+  XL = "XL",
+  DXL = "2XL",
+}
+
 //   interfaces
 
 export interface Product {
@@ -19,4 +28,15 @@ export interface Product {
   count: number;
   rate: number;
   title: string;
+}
+
+export interface Size {
+  id: number;
+  size: SizesEnum;
+}
+
+export interface Cart extends Product {
+  size: Size;
+  quantity: number;
+  totalPrice: number;
 }

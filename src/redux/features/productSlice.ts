@@ -1,4 +1,4 @@
-import { Product } from "@/data/Product";
+import { Cart, Product } from "@/data/Product";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 type InitialState = {
@@ -9,8 +9,13 @@ type InitialState = {
   // fetch single product in Object.
   loadingProduct: boolean;
   productError: string;
-  product: Product | {};
+  product: Product;
+  // Cart
+  cart: Cart[];
 };
+
+var cartItems =
+  typeof window !== "undefined" && localStorage.getItem("productCart");
 
 const initialState = {
   // fetch all products in array.
@@ -21,7 +26,9 @@ const initialState = {
   loadingProduct: false,
   productError: "",
   product: {},
-} as InitialState;
+  //Cart
+  cart: cartItems ? JSON.parse(cartItems) : [],
+} as unknown as InitialState;
 
 // fetch all products.
 const fetchProducts = createAsyncThunk(
@@ -50,7 +57,55 @@ const fetchProduct = createAsyncThunk(
 const productSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    handleAddToCart: (state, action) => {
+      var cartArray = [];
+      var selectedArray = action.payload;
+      const localStorageCart =
+        typeof window !== "undefined" && localStorage.getItem("productCart");
+
+      // parsing the data
+      if (localStorageCart) {
+        cartArray = JSON.parse(localStorageCart);
+      }
+
+      // merge two array
+      let data: Cart[] = [...cartArray, ...selectedArray];
+
+      let array: Cart[] = [];
+      let uniqueObj: { [key: string]: Cart } = {};
+      for (let i in data) {
+        let id = data[i]["id"];
+        uniqueObj[id] = data[i];
+      }
+
+      // unique object of array
+      for (let i in uniqueObj) {
+        array.push(uniqueObj[i]);
+      }
+
+      typeof window !== "undefined";
+      localStorage.setItem("productCart", JSON.stringify(array));
+
+      state.cart = array || [];
+    },
+    // Removing one attaraction from the cart.
+    handleRemoveFromCart: (state, action) => {
+      const cart = state.cart.filter((item) => {
+        return item.id !== action.payload;
+      });
+      state.cart = cart;
+      typeof window !== "undefined";
+      localStorage.setItem("productCart", JSON.stringify(cart));
+    },
+    // Emptying the full cart.
+    handleEmptyCart: (state, action) => {
+      const cart: Cart[] = [];
+      state.cart = cart;
+      typeof window !== "undefined";
+      localStorage.setItem("productCart", JSON.stringify(cart));
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state, action) => {
@@ -83,6 +138,7 @@ const productSlice = createSlice({
 
 export { fetchProducts, fetchProduct };
 
-// export const {  } = productSlice.actions;
+export const { handleAddToCart, handleEmptyCart, handleRemoveFromCart } =
+  productSlice.actions;
 
 export default productSlice.reducer;
