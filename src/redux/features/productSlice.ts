@@ -54,6 +54,7 @@ const fetchProduct = createAsyncThunk(
   }
 );
 
+
 const productSlice = createSlice({
   name: "user",
   initialState,

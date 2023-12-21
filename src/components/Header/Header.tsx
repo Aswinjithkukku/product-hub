@@ -16,9 +16,8 @@ const Header: React.FC<HeaderProps> = () => {
                     <Logo className="self-center " />
                 </div>
                 <div className="rt-section flex gap-3">
-                    <Link href="/cart" className="flex self-center">
+                    <Link href="/products/cart" className="flex self-center">
                         <ShoppingCartIcon
-                            href="/cart"
                             color="black"
                             className="h-8 w-8  px-1 "
                         />

@@ -3,6 +3,7 @@
 import { Cart, Product, Size, SizesEnum } from "@/data/Product";
 import { fetchProduct, handleAddToCart } from "@/redux/features/productSlice";
 import { AppDispatch, useAppSelector } from "@/redux/store";
+import BtnLoader from "@/shared/BtnLoader";
 import Button from "@/shared/Button";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import Heading from "@/shared/Heading";
@@ -52,8 +53,11 @@ const ProductHomePage = () => {
         id: 1,
         size: SizesEnum.M
     })
+    //
+    const [addedtocart, setAddedtocart] = useState<boolean>(false)
 
-    const { product } = useAppSelector((state) => state.products);
+
+    const { product, loadingProduct } = useAppSelector((state) => state.products);
 
     useEffect(() => {
         // @ts-ignore
@@ -67,11 +71,20 @@ const ProductHomePage = () => {
 
     // handle Add to Cart
     const addToCart = (product: Product) => {
+        setAddedtocart(true)
         const cartProduct: Cart = {
             ...product, totalPrice: qty * product?.price, quantity: qty, size: size
         }
         dispatch(handleAddToCart([cartProduct]))
     }
+
+    // time out for copy functionality.
+    useEffect(() => {
+        setTimeout(() => {
+            setAddedtocart(false);
+        }, 2000);
+    }, [addedtocart]);
+
 
     // render image section.
     const renderImage = () => {
@@ -154,7 +167,7 @@ const ProductHomePage = () => {
                 {/* cart buttons */}
                 <div className="flex gap-5">
                     <Button className="flex gap-2 border border-gray-400 shadow">Add to <HeartIcon className="h-5 w-5" /></Button>
-                    <ButtonPrimary onClick={() => addToCart(product)} className="shadow">Add to cart</ButtonPrimary>
+                    <ButtonPrimary onClick={() => addToCart(product)} className="shadow">{addedtocart ? <BtnLoader /> : " Add to cart"}</ButtonPrimary>
                 </div>
                 <hr />
                 {/* Description */}
@@ -162,15 +175,46 @@ const ProductHomePage = () => {
             </div>
         );
     };
+    if (loadingProduct) {
+        return (
+            <div className="container py-10">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
+                    <div className="md:col-span-4 relative ">
+                        <div role="status" className="flex items-center justify-center h-56 max-w-sm bg-gray-300 rounded-lg animate-pulse ">
+                            <svg className="w-10 h-10 text-gray-200 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                                <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z" />
+                                <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM9 13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2Zm4 .382a1 1 0 0 1-1.447.894L10 13v-2l1.553-1.276a1 1 0 0 1 1.447.894v2.764Z" />
+                            </svg>
+                            <span className="sr-only">Loading...</span>
+                        </div>
 
-    return (
-        <div className="container py-10">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
-                <div className="md:col-span-4 relative">{renderImage()}</div>
-                <div className="md:col-span-8">{renderDetailSection()}</div>
+                    </div>
+                    <div className="md:col-span-8 space-y-3">
+                        {[1, 2].map((item) => (
+                            <div key={item} role="status" className="max-w-sm animate-pulse">
+                                <div className="h-3.5 bg-gray-200 rounded-full  w-48 mb-4"></div>
+                                <div className="h-3 bg-gray-200 rounded-full  max-w-[360px] mb-2.5"></div>
+                                <div className="h-3 bg-gray-200 rounded-full  mb-2.5"></div>
+                                <div className="h-3 bg-gray-200 rounded-full  max-w-[330px] mb-2.5"></div>
+                                <div className="h-3 bg-gray-200 rounded-full  max-w-[300px] mb-2.5"></div>
+                                <div className="h-3 bg-gray-200 rounded-full  max-w-[360px]"></div>
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
-        </div>
-    );
+        )
+    } else {
+        return (
+            <div className="container py-10">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
+                    <div className="md:col-span-4 relative">{renderImage()}</div>
+                    <div className="md:col-span-8">{renderDetailSection()}</div>
+                </div>
+            </div>
+        );
+    }
 };
 
 export default ProductHomePage;
