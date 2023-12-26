@@ -15,7 +15,7 @@ To run the project locally using Docker, follow these steps:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/product-hub.git
+    git clone https://github.com/aswinjithkukku/product-hub.git
     ```
 
 2. Navigate to the project's root folder:
